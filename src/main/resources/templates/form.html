@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <title th:text="Productos"></title>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+                        aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                    <a class="navbar-brand" href="#">Northwind</a>
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link" th:href="@{/product}">Product</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <h2 th:text="${product.id == null? 'Nuevo Producto' : 'Editar Producto'}">Nuevo/Editar Producto</h2>
+            <hr/>
+            <form method="post" th:action="@{'/product/save'}" th:object="${product}">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group">
+                    <label for="productname">Nombre del Producto</label>
+                    <input type="text" class="form-control" th:field="*{productName}"/>
+                    <div class="text-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}">Error</div>
+                </div>
+                <div class="form-group">
+                    <label for="supplier">Proveedor</label>
+                    <select class="form-control" th:field="*{supplier.id}">
+                        <option th:each="supplier : ${listaProveedores}"
+                                th:value="${supplier.id}" th:text="${supplier.companyName}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="category">Categoría</label>
+                    <select class="form-control" th:field="*{category.id}">
+                        <option th:each="categoria : ${listaCategorias}" th:value="${categoria.id}"
+                                th:text="${categoria.categoryName}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quantityperunit">Cantidad por unidad</label>
+                    <input type="text" class="form-control" th:field="*{quantityPerUnit}"/>
+                </div>
+                <div class="form-group">
+                    <label for="unitprice">Precio unitario</label>
+                    <input type="text" class="form-control" th:field="*{unitPrice}"/>
+                    <div class="text-danger" th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}">Error</div>
+                </div>
+                <div class="form-group">
+                    <label for="unitsinstock">Unidades en stock</label>
+                    <input type="text" class="form-control" th:field="*{unitsInStock}"/>
+                    <div class="text-danger" th:if="${#fields.hasErrors('unitsInStock')}" th:errors="*{unitsInStock}">Error</div>
+                </div>
+                <div class="form-group">
+                    <label for="unitsonorder">Unidades ordenadas</label>
+                    <input type="number" class="form-control" th:field="*{unitsOnOrder}"/>
+                    <div class="text-danger" th:if="${#fields.hasErrors('unitsOnOrder')}" th:errors="*{unitsOnOrder}">Error</div>
+                </div>
+                <div class="form-group">
+                    <label for="reorderlevel">Nivel de reorden</label>
+                    <input type="number" class="form-control" th:field="*{reorderLevel}"/>
+                    <div class="text-danger" th:if="${#fields.hasErrors('reorderLevel')}" th:errors="*{reorderLevel}">Error</div>
+                </div>
+                <div class="form-check pb-2">
+                    <input class="form-check-input" type="checkbox" th:field="*{discontinued}"/>
+                    <label class="form-check-label">¿Descontinuado?</label>
+                </div>
+                <a th:href="@{'/product'}" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-primary" th:text="${product.id == null? 'Registrar' : 'Actualizar'}">Reg/act</button>
+            </form>
+        </div>
+    </body>
+</html>
